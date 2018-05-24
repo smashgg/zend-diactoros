@@ -14,17 +14,15 @@ use RuntimeException;
 
 class UploadedFile implements UploadedFileInterface
 {
-    const ERROR_MESSAGES = [
-        UPLOAD_ERR_OK         => 'There is no error, the file uploaded with success',
-        UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds the upload_max_filesize directive in php.ini',
-        UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was '
-            . 'specified in the HTML form',
-        UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded',
-        UPLOAD_ERR_NO_FILE    => 'No file was uploaded',
-        UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder',
-        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk',
-        UPLOAD_ERR_EXTENSION  => 'A PHP extension stopped the file upload.',
-    ];
+        const UPLOAD_ERR_OK         = 'There is no error, the file uploaded with success';
+        const UPLOAD_ERR_INI_SIZE   = 'The uploaded file exceeds the upload_max_filesize directive in php.ini';
+        const UPLOAD_ERR_FORM_SIZE  = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was '
+            . 'specified in the HTML form';
+        const UPLOAD_ERR_PARTIAL    = 'The uploaded file was only partially uploaded';
+        const UPLOAD_ERR_NO_FILE    = 'No file was uploaded';
+        const UPLOAD_ERR_NO_TMP_DIR = 'Missing a temporary folder';
+        const UPLOAD_ERR_CANT_WRITE = 'Failed to write file to disk';
+        const UPLOAD_ERR_EXTENSION  = 'A PHP extension stopped the file upload.';
 
     /**
      * @var string|null
@@ -126,7 +124,7 @@ class UploadedFile implements UploadedFileInterface
         if ($this->error !== UPLOAD_ERR_OK) {
             throw new RuntimeException(sprintf(
                 'Cannot retrieve stream due to upload error: %s',
-                self::ERROR_MESSAGES[$this->error]
+                self::getErrorMessage($this->error)
             ));
         }
 
@@ -162,7 +160,7 @@ class UploadedFile implements UploadedFileInterface
         if ($this->error !== UPLOAD_ERR_OK) {
             throw new RuntimeException(sprintf(
                 'Cannot retrieve stream due to upload error: %s',
-                self::ERROR_MESSAGES[$this->error]
+                self::getErrorMessage($this->error)
             ));
         }
 
@@ -256,5 +254,21 @@ class UploadedFile implements UploadedFileInterface
         }
 
         fclose($handle);
-    }
+	}
+
+	private static function getAllErrors() {
+		return [
+			UPLOAD_ERR_OK => self::UPLOAD_ERR_OK,
+			UPLOAD_ERR_FORM_SIZE => self::UPLOAD_ERR_FORM_SIZE,
+			UPLOAD_ERR_PARTIAL => self::UPLOAD_ERR_PARTIAL,
+			UPLOAD_ERR_NO_FILE => self::UPLOAD_ERR_NO_FILE,
+			UPLOAD_ERR_NO_TMP_DIR => self::UPLOAD_ERR_NO_TMP_DIR,
+			UPLOAD_ERR_CANT_WRITE => self::UPLOAD_ERR_CANT_WRITE,
+			UPLOAD_ERR_EXTENSION => self::UPLOAD_ERR_EXTENSION,
+		];
+	}
+
+	private static function getErrorMessage($error) {
+		return self::getAllErrors()[$error];
+	}
 }

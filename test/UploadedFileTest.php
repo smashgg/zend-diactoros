@@ -336,7 +336,7 @@ class UploadedFileTest extends TestCase
 
     public function errorConstantsAndMessages()
     {
-        foreach (UploadedFile::ERROR_MESSAGES as $constant => $message) {
+        foreach (UploadedFile::getAllErrors() as $constant => $message) {
             if ($constant === \UPLOAD_ERR_OK) {
                 continue;
             }
